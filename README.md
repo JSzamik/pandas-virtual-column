@@ -36,6 +36,7 @@ Pipeline (run it from the project folder, `solution.py` and `sales.csv` have to 
 ```bash
 python pipeline.py
 ```
+At the moment this ends with `74 passed`.
 
 It prints a short report of what it fixed and writes `revenue_by_region.csv`.
 
