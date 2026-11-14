@@ -93,6 +93,15 @@ Revenue per region is the sum of that column, rounded to 2 decimals, and the
 result goes to `revenue_by_region.csv` sorted by region. The discount in the
 file is an amount of money for the whole line, so it is subtracted as is.
 
+Before writing any cleaning code I read the file with everything as text and
+looked at each column on its own: empty values, stray spaces, how many
+different values there are, and what shape the values have. I looked at the
+distributions (how often each region and product shows up, the range of the
+quantities, discounts and dates, which price each product has) and at the
+outliers. That is how I found the four quantities far above the rest, which
+are all between 1 and 40, and that every discount is 5% or 10% of its line.
+The table below comes from that.
+
 The file has 1507 data rows. After cleaning there are 1500, and the 7 rows
 that are gone are listed below.
 
@@ -115,6 +124,12 @@ I also checked the dates (all valid, from 2026-01-02 to 2026-09-29), the
 format of the discounts, product names and the region names after cleaning.
 Nothing was wrong there. No row was dropped because it could not be fixed, and
 after removing the duplicates no `Order ID` appears twice.
+
+[!NOTE]
+When I write "the `1 762` lines" I mean all four lines whose
+quantity has a space inside, not only the one that is exactly `1 762`. They are
+SO-10251 (`1 762`), SO-10734 (`1 745`), SO-11088 (`1 371`) and SO-11312
+(`1 427`).
 
 ### Decisions
 
@@ -141,7 +156,25 @@ after removing the duplicates no `Order ID` appears twice.
 - **Dates are not used.** Revenue does not depend on them, so a bad date would
   not remove a row (there are none).
 - **Rounding.** Totals are rounded to 2 decimals, and the CSV always has 2.
+- 
+### How much the decisions change the result
 
+To see which decisions matter I ran the pipeline again with the other choice
+and compared the total revenue (2,570,247.03 with the choices above):
+
+| If I had... | Total revenue | Change |
+|---|---|---|
+| dropped the 6 negative lines | 2,571,160.03 | +913.00 (+0.04%) |
+| turned the negative quantities into positive ones | 2,572,073.03 | +1,826.00 (+0.07%) |
+| kept the 5 duplicate lines | 2,575,543.43 | +5,296.40 (+0.21%) |
+| read `1 762` as 762 | 2,350,247.03 | -220,000.00 (-8.56%) |
+| dropped the 4 lines with `1 762` | 2,245,898.03 | -324,349.00 (-12.62%) |
+
+The negative quantities and the duplicates hardly matter. The `1 762` lines are
+the one decision that changes the picture. They are in North (two lines),
+Central and South, and without them South would be the top region instead of
+North. If someone can say what these four quantities should be, that is the
+one thing worth checking.
 ### Result
 
 | region | revenue |
