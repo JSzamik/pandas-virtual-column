@@ -125,8 +125,8 @@ format of the discounts, product names and the region names after cleaning.
 Nothing was wrong there. No row was dropped because it could not be fixed, and
 after removing the duplicates no `Order ID` appears twice.
 
-[!NOTE]
-When I write "the `1 762` lines" I mean all four lines whose
+
+> **Note:** When I write "the `1 762` lines" I mean all four lines whose
 quantity has a space inside, not only the one that is exactly `1 762`. They are
 SO-10251 (`1 762`), SO-10734 (`1 745`), SO-11088 (`1 371`) and SO-11312
 (`1 427`).
